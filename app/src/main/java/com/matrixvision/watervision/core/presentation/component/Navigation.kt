@@ -12,17 +12,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import com.matrixvision.watervision.core.util.Screens
+import com.matrixvision.watervision.feature_auth.presentation.register.RegisterScreen
 import com.matrixvision.watervision.feature_auth.presentation.splash.SplashScreen
 
 @Composable
 fun Navigation(
     navController: NavHostController,
+    scaffoldState: ScaffoldState,
     imageLoader: ImageLoader
 ){
 
     NavHost(
         navController = navController,
-        startDestination = Screens.SplashScreen.route,
+        startDestination = Screens.RegisterScreen.route,
         modifier = Modifier.fillMaxSize()
     ){
         composable(Screens.SplashScreen.route){
@@ -32,8 +34,12 @@ fun Navigation(
             )
 
         }
-        composable(Screens.LoginScreen.route){
-
+        composable(Screens.RegisterScreen.route){
+            RegisterScreen(
+                navController = navController,
+                scaffoldState = scaffoldState,
+                onPopBackStack = navController::popBackStack
+            )
         }
     }
 

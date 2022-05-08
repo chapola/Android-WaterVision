@@ -5,7 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -33,9 +35,16 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                     ) {
 
-                    val navHostController = rememberNavController()
-                    val navBackStackEntry by navHostController.currentBackStackEntryAsState()
-                    Navigation(navController = navHostController, imageLoader = imageLoader)
+                    val navController = rememberNavController()
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val scaffoldState = rememberScaffoldState()
+                    Scaffold(
+                      scaffoldState = scaffoldState
+
+                    ) {
+                        Navigation(navController = navController,scaffoldState, imageLoader = imageLoader)
+                    }
+
                     
                 }
 
