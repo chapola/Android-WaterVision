@@ -122,10 +122,10 @@ class RegisterViewModel @Inject constructor(
                     )
                     _onRegister.emit(Unit)
                     _registerState.value = RegisterState(isLoading = false)
-//                    _usernameState.value = StandardTextFieldState()
-//                    _emailState.value = StandardTextFieldState()
-//                    _passwordState.value = PasswordTextFieldState()
-//                    _acceptTerms.value = CheckBoxState(isChecked = false)
+                    _usernameState.value = StandardTextFieldState()
+                    _emailState.value = StandardTextFieldState()
+                    _passwordState.value = PasswordTextFieldState()
+                    _acceptTerms.value = CheckBoxState(isChecked = false)
 
                 }
                 is Resource.Error ->{

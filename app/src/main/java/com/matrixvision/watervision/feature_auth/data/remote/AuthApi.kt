@@ -12,6 +12,10 @@ interface AuthApi {
         @Body request: CreateAccountRequest
     ):BasicApiResponse<Unit>
 
+    @POST("api/user/login")
+    suspend fun log(
+        @Body request: LoginRequest
+    ):BasicApiResponse<Unit>
 
     @GET("authenticate")
     suspend fun authenticate()

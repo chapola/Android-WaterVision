@@ -24,6 +24,9 @@ class SplashViewModel @Inject constructor(
             when(authenticationUseCase()){
                 is Resource.Success ->{
                     // navigate to home screen
+                    _eventFlow.emit(
+                        UiEvent.Navigate(Screens.LoginScreen.route)
+                    )
                 }
                 is Resource.Error ->{
                     _eventFlow.emit(

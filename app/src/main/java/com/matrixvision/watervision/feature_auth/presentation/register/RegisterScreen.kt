@@ -1,5 +1,6 @@
 package com.matrixvision.watervision.feature_auth.presentation.register
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -8,11 +9,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,6 +30,7 @@ import com.matrixvision.watervision.core.presentation.util.asString
 import com.matrixvision.watervision.core.util.Constants
 import com.matrixvision.watervision.ui.theme.SpaceMedium
 import com.matrixvision.watervision.ui.theme.SpaceSmall
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -67,7 +73,12 @@ fun RegisterScreen(
         }
     }
 
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
 
+    ) {
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -77,7 +88,9 @@ fun RegisterScreen(
     ) {
         Text(
             text = stringResource(id = R.string.register),
-            style = MaterialTheme.typography.h4
+            style = MaterialTheme.typography.h4,
+            color = Color.White
+
         )
         Spacer(modifier = Modifier.height(SpaceMedium))
 
@@ -162,7 +175,8 @@ fun RegisterScreen(
             Text(
                 text = stringResource(id = R.string.accept_terms),
                 modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Start
+                textAlign = TextAlign.Start,
+                color = Color.White
             )
 
         }
@@ -194,7 +208,29 @@ fun RegisterScreen(
                 modifier = Modifier.align(CenterHorizontally)
             )
         }
+    }
+        Text(
+            text = buildAnnotatedString {
+                append(stringResource(id = R.string.already_have_an_account))
+                append(" ")
+                val signUpText = stringResource(id = R.string.sign_in)
+                withStyle(
+                    style = SpanStyle(
+                        color = MaterialTheme.colors.primary
+                    )
+                ) {
+                    append(signUpText)
+                }
+            },
+            style = MaterialTheme.typography.body1,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .clickable(!registerState.isLoading) {
+                    navController.popBackStack()
+                }
+        )
 
     }
+
 }
 

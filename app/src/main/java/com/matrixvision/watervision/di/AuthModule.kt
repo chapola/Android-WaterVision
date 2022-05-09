@@ -5,6 +5,7 @@ import com.matrixvision.watervision.feature_auth.data.remote.AuthApi
 import com.matrixvision.watervision.feature_auth.data.repository.AuthRepositoryImpl
 import com.matrixvision.watervision.feature_auth.domain.repository.AuthRepository
 import com.matrixvision.watervision.feature_auth.domain.use_case.AuthenticationUseCase
+import com.matrixvision.watervision.feature_auth.domain.use_case.LoginUseCase
 import com.matrixvision.watervision.feature_auth.domain.use_case.RegisterUseCase
 import dagger.Module
 import dagger.Provides
@@ -49,5 +50,11 @@ object AuthModule {
     @Singleton
     fun provideRegisterUseCase(repository: AuthRepository): RegisterUseCase{
         return RegisterUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLoginUseCase(repository: AuthRepository): LoginUseCase{
+        return LoginUseCase(repository = repository)
     }
 }
