@@ -14,8 +14,10 @@ import com.matrixvision.watervision.core.util.UiText
 import com.matrixvision.watervision.feature_auth.domain.use_case.RegisterUseCase
 import dagger.hilt.android.internal.modules.HiltWrapper_ActivityModule
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,11 +41,11 @@ class RegisterViewModel @Inject constructor(
     val registerState: State<RegisterState> = _registerState
 
 
-    private val _eventFlow = MutableSharedFlow<UiEvent>()
-    val eventFlow = _eventFlow.asSharedFlow()
+    private val _eventFlow = Channel<UiEvent>()
+    val eventFlow = _eventFlow.receiveAsFlow()
 
-    private val _onRegister = MutableSharedFlow<Unit>(replay = 1)
-    val onRegister = _onRegister.asSharedFlow()
+    private val _onRegister = Channel<Unit>()
+    val onRegister = _onRegister.receiveAsFlow()
 
     fun onEvent(event: RegisterEvent){
         when(event){
@@ -117,10 +119,10 @@ class RegisterViewModel @Inject constructor(
             }
             when(registerResult.result){
                 is Resource.Success ->{
-                    _eventFlow.emit(
+                    _eventFlow.send(
                         UiEvent.ShowSnackbar(UiText.StringResource(R.string.success_registration))
                     )
-                    _onRegister.emit(Unit)
+                    _onRegister.send(Unit)
                     _registerState.value = RegisterState(isLoading = false)
                     _usernameState.value = StandardTextFieldState()
                     _emailState.value = StandardTextFieldState()
@@ -129,7 +131,7 @@ class RegisterViewModel @Inject constructor(
 
                 }
                 is Resource.Error ->{
-                    _eventFlow.emit(
+                    _eventFlow.send(
                         UiEvent.ShowSnackbar(registerResult.result.uiText ?: UiText.unknownError())
                     )
                     _registerState.value = RegisterState(isLoading = false)

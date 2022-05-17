@@ -13,9 +13,11 @@ import com.matrixvision.watervision.core.util.UiText
 import com.matrixvision.watervision.feature_auth.domain.models.LoginResult
 import com.matrixvision.watervision.feature_auth.domain.use_case.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,8 +35,8 @@ class LoginViewModel @Inject constructor(
     private val _loginState = mutableStateOf(LoginState())
     val loginState: State<LoginState> = _loginState
 
-    private val _eventFlow = MutableSharedFlow<UiEvent>()
-    val eventFlow = _eventFlow.asSharedFlow()
+    private val _eventFlow = Channel<UiEvent>()
+    val eventFlow = _eventFlow.receiveAsFlow()
 
     fun onEvent(event: LoginEvent){
         when(event){
@@ -84,14 +86,14 @@ class LoginViewModel @Inject constructor(
             }
             when(loginResult.result){
                 is Resource.Success ->{
-                    _eventFlow.emit(
+                    _eventFlow.send(
                         UiEvent.ShowSnackbar(UiText.StringResource(R.string.success_registration))
                     )
 
 //                    _eventFlow.emit(UiEvent.OnLogin)
                 }
                 is Resource.Error ->{
-                    _eventFlow.emit(
+                    _eventFlow.send(
                         UiEvent.ShowSnackbar(
                             loginResult.result.uiText ?: UiText.unknownError()
                         )
